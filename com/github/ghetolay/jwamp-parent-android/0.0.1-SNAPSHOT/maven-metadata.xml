@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.github.ghetolay</groupId>
+  <artifactId>jwamp-parent-android</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20141203.223736</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20141203223736</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.0.1-20141203.223736-1</value>
+        <updated>20141203223736</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

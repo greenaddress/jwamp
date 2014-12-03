@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.github.ghetolay</groupId>
+  <artifactId>jwamp-jee6-jetty-android</artifactId>
+  <versioning>
+    <versions>
+      <version>0.0.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20141203223750</lastUpdated>
+  </versioning>
+</metadata>
