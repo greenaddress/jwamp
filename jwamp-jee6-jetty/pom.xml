@@ -12,10 +12,6 @@
   <description>jwamp :: jetty native sockets implementation</description>
   <url>https://github.com/ghetolay/jwamp</url>
 
-  <properties>
-    <jetty-version>9.1.4.v20140401</jetty-version>
-  </properties>
-
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -35,27 +31,6 @@
       <artifactId>testng</artifactId>
       <version>6.8</version>
       <scope>test</scope>
-    </dependency>
-    <!-- for setting up a test server -->
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-webapp</artifactId>
-      <version>${jetty-version}</version>
-      <scope>provided</scope>
-    </dependency>
-        <!-- for javax.websocket client -->
-    <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
-      <artifactId>javax-websocket-client-impl</artifactId>
-      <version>${jetty-version}</version>
-      <scope>provided</scope>
-    </dependency>
-        <!-- for javax.websocket.server -->
-    <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
-      <artifactId>javax-websocket-server-impl</artifactId>
-      <version>${jetty-version}</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

@@ -20,20 +20,18 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.WebSocketListener;
+import org.eclipse.jetty.websocket.WebSocket;
 
 import com.github.ghetolay.jwamp.AbstractWampConnection;
 import com.github.ghetolay.jwamp.WampConnection;
 import com.github.ghetolay.jwamp.WampMessageHandler;
 import com.github.ghetolay.jwamp.WampSerializer;
 import com.github.ghetolay.jwamp.utils.ResultListener;
-import com.github.ghetolay.jwamp.utils.WaitResponse;
 
-public class JettyConnection extends AbstractWampConnection implements WebSocketListener {
+public class JettyConnection extends AbstractWampConnection implements WebSocket.OnTextMessage {
 
 	private URI uri;
-	protected Session connection;
+	protected Connection connection;
 	
 	private boolean intentionallyClosed = false;
 	
@@ -45,44 +43,25 @@ public class JettyConnection extends AbstractWampConnection implements WebSocket
 			autoReconnect = ReconnectPolicy.IMPOSSIBLE;
 	}
 
-	public void onWebSocketConnect(Session session) {
+	public void onOpen(Connection connection) {
 		if(log.isTraceEnabled())
 			log.trace("New connection opened");
-		
-		this.connection = session;
+
+		this.connection = connection;
 	}
 
-	public void onWebSocketText(String data) {
-		onMessage(data);
-	}
-	
-	public void onWebSocketBinary(byte[] arg0, int arg1, int arg2) {
-		//TODO: send error ?
-	}
-	
-	public void onWebSocketClose(int closeCode, String message){
-		super.onClose(closeCode, message);
-		
+	public void onClose(int closeCode, String message){
 		if(connection != null 
 			&& !intentionallyClosed 
 			&& autoReconnect == ReconnectPolicy.YES){
 			
 			connection = null;
-			String oldId = getSessionId();
-			if(reconnect()){
-				if(log.isDebugEnabled())
-					log.debug("Automatic reconnection.\nOld Id:\""+ oldId + "\"  New Id:\"" + getSessionId() + "\"");
+			if(reconnect())
 				return;
-			}
 		}
-		
-		//implementors don't care about being noticed about temporary disconnection
+		//deja swap les deux, si tjs pas bon reflechir plus fort :)
+		super.onClose(closeCode, message);
 		onClose();
-	}
-	
-	public void onWebSocketError(Throwable error) {
-		//TODO 
-		log.warn("WebsocketError ",error);
 	}
 	
 	/**
@@ -97,17 +76,17 @@ public class JettyConnection extends AbstractWampConnection implements WebSocket
 		connection.close(closeCode, message);
 	}
 	
-	public void setMaxIdleTime(long ms) {
-		connection.setIdleTimeout(ms);
+	public void setMaxIdleTime(int ms) {
+		connection.setMaxIdleTime(ms);
 	}
 
-	public long getMaxIdleTime() {
-		return connection.getIdleTimeout();
+	public int getMaxIdleTime() {
+		return connection.getMaxIdleTime();
 	}
 	
 	@Override
 	public void sendMessage(String data) throws IOException{
-		connection.getRemote().sendString(data);
+		connection.sendMessage(data);
 	}
 	
 	protected boolean reconnect(){
@@ -119,19 +98,13 @@ public class JettyConnection extends AbstractWampConnection implements WebSocket
 			int i;
 			for(i = 0; i <5 ; i++){
 				try{
-					WaitResponse<WampConnection> wr = new WaitResponse<WampConnection>(3000);
-					setWelcomeListener(wr);
-					
 					WampJettyFactory.getInstance().connect(uri, 10000, this);
-					
-					if(this.equals(wr.call()))
-						return true;
+					return true;
 				}catch (Exception e){
 					if(log.isDebugEnabled())
 						log.debug("Failed to reconnect to " + uri.toString() + " [" + (i+1) + "/5] : " + e.getMessage());	
 					
-					setWelcomeListener(null);
-					Thread.sleep(5000);
+						Thread.sleep(5000);
 				}
 			}
 			if( i == 5
@@ -146,7 +119,7 @@ public class JettyConnection extends AbstractWampConnection implements WebSocket
 		return false;
 	}	
 	
-	public Session getConnection(){
+	public Connection getConnection(){
 		return connection;
 	}
 

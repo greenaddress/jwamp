@@ -33,7 +33,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.util.Base64;
+import android.util.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -149,8 +149,8 @@ public class WampWebSocket {
       Mac mac = Mac.getInstance(sk.getAlgorithm());
       mac.init(sk);
       final byte[] hmac = mac.doFinal(authChallenge.getBytes());
-      //return Base64.encodeToString(hmac,Base64.NO_WRAP);
-      return Base64.getEncoder().encodeToString(hmac);
+      return Base64.encodeToString(hmac,Base64.NO_WRAP);
+      // return Base64.getEncoder().encodeToString(hmac);
     } catch (NoSuchAlgorithmException e) {
       throw new SignatureException("error building signature, no such algorithm in device " + HASH_ALGORITHM);
     } catch (InvalidKeyException e) {
