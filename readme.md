@@ -1,3 +1,8 @@
+android-support branch:
+
+ - uses https://github.com/knowledgecode/jetty-websocket-android for jetty8 
+ - tests are not ported, so it needs to be built with `-Dmaven.test.skip=true`
+
 What's jwamp ?
 ==============
 
